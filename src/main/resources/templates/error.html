@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Strona błędu</title>
+</head>
+<body>
+<h1>Coś poszło nie tak 😢 Sorry memory</h1>
+<p>Poniżej szczegóły błędu:</p>
+
+<table border="1" cellpadding="6">
+    <tr>
+        <td>Data</td>
+        <td th:text="${timestamp}">data</td>
+    </tr>
+    <tr>
+        <td>Ścieżka</td>
+        <td th:text="${path}">ścieżka</td>
+    </tr>
+    <tr>
+        <td>Błąd</td>
+        <td th:text="${error}">błąd</td>
+    </tr>
+    <tr>
+        <td>Status</td>
+        <td th:text="${status}">status</td>
+    </tr>
+    <tr>
+        <td>Komunikat</td>
+        <td th:text="${message}">komunikat</td>
+    </tr>
+    <tr>
+        <td>Wyjątek</td>
+        <td th:text="${exception}">wyjątek</td>
+    </tr>
+    <tr>
+        <td>Ślad stosu</td>
+        <td><pre th:text="${trace}">trace</pre></td>
+    </tr>
+</table>
+</body>
+</html>

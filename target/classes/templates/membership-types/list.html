@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html><!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{membershipType.title} + ' - Gym System'">Typy karnetów - Gym System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between mb-3">
+        <h2 th:text="#{membershipType.title}">Typy karnetów</h2>
+        <a class="btn btn-success" th:href="@{/membership-types/form}" th:text="#{action.add}">Dodaj</a>
+    </div>
+
+    <div class="alert alert-info" th:if="${#lists.isEmpty(types)}" th:text="#{page.nodata}">
+        Brak danych
+    </div>
+
+    <table class="table table-striped" th:if="${!#lists.isEmpty(types)}">
+        <thead>
+        <tr>
+            <th th:text="#{table.id}">ID</th>
+            <th th:text="#{membershipType.name}">Nazwa</th>
+            <th th:text="#{membershipType.durationDays}">Dni</th>
+            <th th:text="#{membershipType.price}">Cena</th>
+            <th th:text="#{membershipType.description}">Opis</th>
+            <th th:text="#{table.actions}">Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="t : ${types}">
+            <td th:text="${t.id}">1</td>
+            <td th:text="${t.name}">Premium</td>
+            <td th:text="${t.durationDays}">30</td>
+            <td th:text="${t.price}">199.0</td>
+            <td th:text="${t.description}">Dostęp pełny</td>
+            <td>
+                <a class="btn btn-sm btn-primary"
+                   th:href="@{/membership-types/form(id=${t.id})}"
+                   th:text="#{action.edit}">Edytuj</a>
+
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/membership-types/delete(id=${t.id})}"
+                   onclick="return confirm('Na pewno usunąć?');"
+                   th:text="#{action.delete}">Usuń</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

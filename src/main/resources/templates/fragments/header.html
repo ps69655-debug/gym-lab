@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<th:block th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">Gym System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div id="navbarNav" class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Strona główna</a></li>
+
+                    <li class="nav-item" sec:authorize="hasAnyRole('MEMBER','STAFF','ADMIN')">
+                        <a class="nav-link" th:href="@{/GymPass}">Karnety</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="hasAnyRole('STAFF','ADMIN')">
+                        <a class="nav-link" th:href="@{/classes}">Zajęcia</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                        <a class="nav-link" th:href="@{/admin/users}">Użytkownicy</a>
+                    </li>
+
+                    <li class="nav-item" sec:authorize="hasRole('MEMBER')">
+                        <a class="nav-link" th:href="@{/reservations/mine}">Rezerwacje</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('MEMBER')">
+                        <a class="nav-link" th:href="@{/entries/mine}">Wejścia</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('MEMBER')">
+                        <a class="nav-link" th:href="@{/panel}">Panel klienta</a>
+                    </li>
+
+                    <!-- LAB05: pliki -->
+                    <li class="nav-item" sec:authorize="hasRole('MEMBER')">
+                        <a class="nav-link" th:href="@{/files}">Pliki</a>
+                    </li>
+                </ul>
+
+                <div class="d-flex gap-2 align-items-center">
+                    <span class="text-light me-3" sec:authorize="isAuthenticated()">
+                        <small>Zalogowany jako: <strong sec:authentication="name">użytkownik</strong></small>
+                        <span class="badge bg-secondary ms-1" th:each="auth : ${#authentication.authorities}" th:text="${auth}">ROLE</span>
+                    </span>
+                    <a class="btn btn-outline-light btn-sm" th:href="@{__${requestURI}__(lang='pl')}">PL</a>
+                    <a class="btn btn-outline-light btn-sm" th:href="@{__${requestURI}__(lang='en')}">EN</a>
+                    <form th:action="@{/logout}" method="post" class="d-inline" sec:authorize="isAuthenticated()">
+                        <button class="btn btn-outline-light btn-sm" type="submit">Wyloguj</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{staff.sessions.title}">Zajęcia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <h2 th:text="#{staff.sessions.title}">Zajęcia (obsługa)</h2>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th th:text="#{staff.sessions.name}">Nazwa</th>
+            <th th:text="#{staff.sessions.time}">Czas</th>
+            <th th:text="#{staff.sessions.trainer}">Trener</th>
+            <th th:text="#{staff.sessions.room}">Sala</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="s : ${sessions}">
+            <td th:text="${s.title}">Yoga</td>
+            <td th:text="${s.startTime + ' - ' + s.endTime}">18:00</td>
+            <td th:text="${s.trainer != null ? s.trainer.fullName : '-'}">-</td>
+            <td th:text="${s.room != null ? s.room.name : '-'}">-</td>
+            <td>
+                <a class="btn btn-sm btn-primary"
+                   th:href="@{'/staff/sessions/' + ${s.id}}"
+                   th:text="#{staff.sessions.open}">Otwórz</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

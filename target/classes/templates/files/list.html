@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{files.list.title}">Pliki</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 th:text="#{files.list.title}">Moje pliki</h2>
+        <a class="btn btn-success" th:href="@{/files/upload}" th:text="#{files.add}">Dodaj</a>
+    </div>
+
+    <div class="alert alert-success" th:if="${param.success}">
+        OK.
+    </div>
+
+    <div class="alert alert-info" th:if="${#lists.isEmpty(files)}" th:text="#{page.nodata}">
+        Brak danych
+    </div>
+
+    <table class="table table-striped" th:if="${!#lists.isEmpty(files)}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th th:text="#{files.name}">Nazwa</th>
+            <th th:text="#{files.type}">Typ</th>
+            <th th:text="#{files.storage}">Magazyn</th>
+            <th th:text="#{files.time}">Czas</th>
+            <th th:text="#{table.actions}">Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="f : ${files}">
+            <td th:text="${f.id}">1</td>
+            <td th:text="${f.originalFilename}">file</td>
+            <td th:text="${f.contentType}">type</td>
+            <td>
+                <span class="badge bg-secondary" th:text="${f.storageType}">DB</span>
+            </td>
+            <td th:text="${f.uploadedAt}">time</td>
+            <td class="d-flex gap-2">
+                <!-- DB download -->
+                <a class="btn btn-sm btn-outline-primary"
+                   th:if="${f.storageType.name() == 'DB'}"
+                   th:href="@{'/files/db/' + ${f.id}}"
+                   th:text="#{files.download}">
+                    Pobierz
+                </a>
+
+                <!-- Disk link -->
+                <a class="btn btn-sm btn-outline-success"
+                   th:if="${f.storageType.name() == 'DISK'}"
+                   th:href="@{'/' + ${f.diskPath}}"
+                   target="_blank"
+                   th:text="#{files.open}">
+                    Otwórz
+                </a>
+
+                <form method="post" th:action="@{'/files/' + ${f.id} + '/delete'}">
+                    <button class="btn btn-sm btn-outline-danger" type="submit"
+                            th:text="#{files.delete}">
+                        Usuń
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{staff.session.details.title}">Frekwencja</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <a class="btn btn-secondary mb-3" th:href="@{/staff/sessions}"
+       th:text="#{staff.session.back}">Powrót</a>
+
+    <h3 th:text="${session.title}">Zajęcia</h3>
+    <p>
+        <strong th:text="#{staff.session.capacity}">Limit</strong>:
+        <span th:text="${session.maxParticipants}">0</span>
+    </p>
+
+    <div class="alert alert-success" th:if="${param.success}">
+        Zapisano status.
+    </div>
+
+    <h4 th:text="#{staff.session.participants}">Uczestnicy</h4>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th th:text="#{staff.session.member}">Członek</th>
+            <th th:text="#{staff.session.status}">Status</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${reservations}">
+            <td th:text="${r.member.fullName}">Jan</td>
+            <td>
+                <span class="badge bg-secondary" th:text="${r.status}">CONFIRMED</span>
+            </td>
+            <td>
+                <form method="post"
+                      th:action="@{'/staff/sessions/reservation/' + ${r.id} + '/status'}"
+                      class="d-flex gap-2">
+                    <input type="hidden" name="sessionId" th:value="${session.id}"/>
+                    <select class="form-select form-select-sm" name="status">
+                        <option th:each="st : ${statuses}"
+                                th:value="${st}"
+                                th:selected="${st == r.status}"
+                                th:text="${st}">
+                        </option>
+                    </select>
+                    <button class="btn btn-sm btn-primary" type="submit"
+                            th:text="#{staff.session.saveStatus}">Zapisz</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

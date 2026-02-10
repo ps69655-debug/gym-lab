@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{membershipType.formTitle} + ' - Gym System'">Formularz typu karnetu - Gym System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0" th:text="#{membershipType.formTitle}">Formularz typu karnetu</h3>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/membership-types/form}" th:object="${membershipType}" method="post">
+                        <input type="hidden" th:field="*{id}"/>
+
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{membershipType.name}">Nazwa</label>
+                            <input type="text"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''"
+                                   th:field="*{name}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}">
+                                <span th:each="err : ${#fields.errors('name')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{membershipType.description}">Opis</label>
+                            <textarea class="form-control"
+                                      th:field="*{description}"
+                                      rows="3"></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{membershipType.durationDays}">Czas (dni)</label>
+                            <input type="number"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('durationDays')} ? 'is-invalid' : ''"
+                                   th:field="*{durationDays}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('durationDays')}">
+                                <span th:each="err : ${#fields.errors('durationDays')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label" th:text="#{membershipType.price}">Cena</label>
+                            <input type="number"
+                                   step="0.01"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''"
+                                   th:field="*{price}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}">
+                                <span th:each="err : ${#fields.errors('price')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/membership-types}" class="btn btn-secondary" th:text="#{form.cancel}">Anuluj</a>
+                            <button type="submit" class="btn btn-primary" th:text="#{form.submit}">Zapisz</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mt-3 alert alert-secondary">
+                <small th:text="#{membershipType.hint}">
+                    Wskazówka: nazwa musi być unikalna, a czas i cena nie mogą być ujemne.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

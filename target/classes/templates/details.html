@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szczegóły Karnetu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2>Szczegóły Karnetu #<span th:text="${gymPass.id}">1</span></h2>
+                </div>
+
+                <div class="card-body">
+
+                    <!-- ✅ zdjęcie (z dysku przez /images/**) -->
+                    <div class="mb-3" th:if="${gymPass.imageFileName != null}">
+                        <h5>Zdjęcie</h5>
+                        <img class="img-fluid rounded"
+                             th:src="@{'/images/gympass/' + ${gymPass.id} + '/' + ${gymPass.imageFileName}}"
+                             alt="GymPass image"
+                             style="max-height: 350px;">
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5>Informacje podstawowe</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th th:text="#{label.gymPass.ownerName}">Właściciel:</th>
+                                    <td th:text="${gymPass.ownerName}">Jan Kowalski</td>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{label.gymPass.passType}">Typ karnetu:</th>
+                                    <td th:text="${gymPass.passType}">Miesięczny</td>
+                                </tr>
+                                <tr>
+                                    <th>Status:</th>
+                                    <td>
+                                        <span class="badge"
+                                              th:classappend="${gymPass.active} ? 'bg-success' : 'bg-danger'"
+                                              th:text="${gymPass.active} ? 'Aktywny' : 'Nieaktywny'">
+                                            Aktywny
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr th:if="${gymPass.status != null}">
+                                    <th>Status szczegółowy:</th>
+                                    <td th:text="${gymPass.status}">ACTIVE</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5>Daty i parametry</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th th:text="#{label.gymPass.startDate}">Data rozpoczęcia:</th>
+                                    <td th:text="${gymPass.startDate != null ? #temporals.format(gymPass.startDate, 'dd-MM-yyyy') : '-'}">-</td>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{label.gymPass.endDate}">Data zakończenia:</th>
+                                    <td th:text="${gymPass.endDate != null ? #temporals.format(gymPass.endDate, 'dd-MM-yyyy') : '-'}">-</td>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{label.gymPass.entriesLeft}">Pozostałe wejścia:</th>
+                                    <td th:text="${gymPass.entriesLeft}">10</td>
+                                </tr>
+                                <tr>
+                                    <th th:text="#{label.gymPass.price}">Cena:</th>
+                                    <td th:text="${gymPass.price != null ? #numbers.formatDecimal(gymPass.price, 1, 2) + ' PLN' : '-'}">-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3" th:if="${gymPass.notes != null and !gymPass.notes.isEmpty()}">
+                        <div class="col-12">
+                            <h5 th:text="#{label.gymPass.notes}">Uwagi</h5>
+                            <p class="text-muted" th:text="${gymPass.notes}">Brak uwag</p>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3" th:if="${gymPass.addons != null and !gymPass.addons.isEmpty()}">
+                        <div class="col-12">
+                            <h5>Dodatki</h5>
+                            <ul>
+                                <li th:each="addon : ${gymPass.addons}" th:text="${addon.name}">Nazwa dodatku</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3" th:if="${gymPass.member != null}">
+                        <div class="col-12">
+                            <h5>Informacje o członku</h5>
+                            <p>
+                                <strong>Nazwa:</strong> <span th:text="${gymPass.member.fullName}">-</span><br/>
+                                <strong>Email:</strong> <span th:text="${gymPass.member.email ?: '-'}">-</span><br/>
+                                <strong>Aktywny:</strong>
+                                <span class="badge"
+                                      th:classappend="${gymPass.member.enabled} ? 'bg-success' : 'bg-danger'"
+                                      th:text="${gymPass.member.enabled} ? 'Tak' : 'Nie'">Tak</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h5>Informacje audytowe</h5>
+                            <table class="table table-sm table-borderless text-muted">
+                                <tr>
+                                    <th>Utworzone przez:</th>
+                                    <td th:text="${gymPass.createdBy ?: '-'}">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Data utworzenia:</th>
+                                    <td th:text="${gymPass.createdDate != null ? #temporals.format(gymPass.createdDate, 'dd-MM-yyyy HH:mm:ss') : '-'}">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Zmodyfikowane przez:</th>
+                                    <td th:text="${gymPass.modifiedBy ?: '-'}">-</td>
+                                </tr>
+                                <tr>
+                                    <th>Data modyfikacji:</th>
+                                    <td th:text="${gymPass.modifiedDate != null ? #temporals.format(gymPass.modifiedDate, 'dd-MM-yyyy HH:mm:ss') : '-'}">-</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card-footer">
+                    <a th:href="@{/GymPass}" class="btn btn-secondary">Powrót do listy</a>
+                    <a sec:authorize="hasRole('ADMIN')"
+                       th:href="@{/form(id=${gymPass.id})}"
+                       class="btn btn-primary">Edytuj</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

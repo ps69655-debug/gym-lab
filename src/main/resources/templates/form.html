@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formularz GymPass</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Formularz GymPass</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="alert alert-danger" th:if="${uploadError}" th:text="${uploadError}">
+                        Błąd uploadu
+                    </div>
+
+                    <!-- ✅ WAŻNE: enctype -->
+                    <form th:action="@{/form}" th:object="${gymPass}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" th:field="*{id}"/>
+
+                        <div class="mb-3">
+                            <label th:text="#{label.gymPass.ownerName}" class="form-label">Właściciel:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('ownerName')} ? 'is-invalid' : ''"
+                                   th:field="*{ownerName}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('ownerName')}">
+                                <span th:each="err : ${#fields.errors('ownerName')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label th:text="#{label.gymPass.passType}" class="form-label">Typ karnetu:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('passType')} ? 'is-invalid' : ''"
+                                   th:field="*{passType}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('passType')}">
+                                <span th:each="err : ${#fields.errors('passType')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label th:text="#{label.gymPass.startDate}" class="form-label">Data rozpoczęcia:</label>
+                            <input type="date"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('startDate')} ? 'is-invalid' : ''"
+                                   th:field="*{startDate}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('startDate')}">
+                                <span th:each="err : ${#fields.errors('startDate')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label th:text="#{label.gymPass.endDate}" class="form-label">Data zakończenia:</label>
+                            <input type="date"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('endDate')} ? 'is-invalid' : ''"
+                                   th:field="*{endDate}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('endDate')}">
+                                <span th:each="err : ${#fields.errors('endDate')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label th:text="#{label.gymPass.entriesLeft}" class="form-label">Pozostałe wejścia:</label>
+                            <input type="number"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('entriesLeft')} ? 'is-invalid' : ''"
+                                   th:field="*{entriesLeft}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('entriesLeft')}">
+                                <span th:each="err : ${#fields.errors('entriesLeft')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label th:text="#{label.gymPass.price}" class="form-label">Cena:</label>
+                            <input type="number"
+                                   step="0.01"
+                                   class="form-control"
+                                   th:classappend="${#fields.hasErrors('price')} ? 'is-invalid' : ''"
+                                   th:field="*{price}" />
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}">
+                                <span th:each="err : ${#fields.errors('price')}" th:text="${err}"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label th:text="#{label.gymPass.notes}" class="form-label">Uwagi:</label>
+                            <textarea class="form-control" th:field="*{notes}" rows="3"></textarea>
+                        </div>
+
+                        <!-- ✅ Upload obrazu -->
+                        <div class="mb-3">
+                            <label class="form-label">Zdjęcie karnetu (jpg/png)</label>
+                            <input class="form-control" type="file" name="imageFile" accept=".jpg,.jpeg,.png">
+                            <div class="form-text">Plik zapisze się na dysku w katalogu: uploads/gympass/{id}/</div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a th:href="@{/GymPass}" class="btn btn-secondary">Anuluj</a>
+                            <button type="submit" class="btn btn-primary">Zapisz</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

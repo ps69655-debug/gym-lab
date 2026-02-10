@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Gym System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <span sec:authorize="isAuthenticated()">
+                    Witaj, <span sec:authentication="name">użytkowniku</span>!
+                </span>
+                <span sec:authorize="!isAuthenticated()">
+                    Witaj w systemie Gym Management!
+                </span>
+            </h1>
+            <p class="lead" sec:authorize="isAuthenticated()">
+                Twoje role:
+                <span class="badge bg-primary"
+                      th:each="authority : ${#authentication.authorities}"
+                      th:text="${authority}">
+                    ROLE_MEMBER
+                </span>
+            </p>
+            <div sec:authorize="!isAuthenticated()" class="alert alert-info">
+                <p>Zaloguj się, aby uzyskać dostęp do pełnej funkcjonalności systemu.</p>
+                <a th:href="@{/login}" class="btn btn-primary">Zaloguj się</a>
+                <a th:href="@{/register}" class="btn btn-secondary">Zarejestruj się</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4" sec:authorize="hasAnyRole('MEMBER','STAFF','ADMIN')">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-credit-card"></i>
+                        <span th:text="#{nav.gympasses}">Karnety</span>
+                    </h5>
+                    <p class="card-text">Przeglądaj i zarządzaj karnetami</p>
+                    <a th:href="@{/GymPass}" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" sec:authorize="hasAnyRole('STAFF','ADMIN')">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-calendar"></i>
+                        <span th:text="#{nav.classes}">Zajęcia</span>
+                    </h5>
+                    <p class="card-text">Zarządzaj grafikiem zajęć</p>
+                    <a th:href="@{/classes}" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" sec:authorize="hasRole('MEMBER')">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-person-circle"></i>
+                        <span th:text="#{nav.panel}">Panel klienta</span>
+                    </h5>
+                    <p class="card-text">Twój osobisty panel</p>
+                    <a th:href="@{/panel}" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" sec:authorize="hasRole('MEMBER')">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-bookmark"></i>
+                        <span th:text="#{nav.reservations}">Rezerwacje</span>
+                    </h5>
+                    <p class="card-text">Twoje rezerwacje na zajęcia</p>
+                    <a th:href="@{/reservations/mine}" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" sec:authorize="hasRole('MEMBER')">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="bi bi-door-open"></i>
+                        <span th:text="#{nav.entries}">Wejścia</span>
+                    </h5>
+                    <p class="card-text">Historia Twoich wejść</p>
+                    <a th:href="@{/entries/mine}" class="btn btn-primary">Przejdź</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Przełącznik języka</h5>
+                    <p class="card-text">Wybierz język interfejsu:</p>
+                    <a class="btn btn-outline-primary" th:href="@{/(lang='pl')}">Polski (PL)</a>
+                    <a class="btn btn-outline-primary" th:href="@{/(lang='en')}">English (EN)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

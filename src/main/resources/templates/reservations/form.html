@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{reservations.form.title} + ' - Gym System'">Rezerwacja</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <h2 th:text="#{reservations.form.title}">Zarezerwuj zajęcia</h2>
+
+    <div class="alert alert-success" th:if="${param.success}" th:text="#{reservations.msg.success}">
+        Rezerwacja utworzona
+    </div>
+
+    <div class="alert alert-danger" th:if="${param.error}">
+        <span th:switch="${param.error[0]}">
+            <span th:case="'class_started'" th:text="#{reservations.err.classStarted}">Zajęcia już się rozpoczęły</span>
+            <span th:case="'already_reserved'" th:text="#{reservations.err.alreadyReserved}">Masz już rezerwację</span>
+            <span th:case="'class_full'" th:text="#{reservations.err.classFull}">Brak wolnych miejsc</span>
+            <span th:case="*" th:text="#{reservations.err.unknown}">Nieznany błąd</span>
+        </span>
+    </div>
+
+    <form method="post" th:action="@{/reservations/form}">
+        <div class="mb-3">
+            <label class="form-label" th:text="#{reservations.form.choose}">Wybierz zajęcia</label>
+            <select class="form-select" name="classScheduleId" required>
+                <option value="" th:text="#{select.choose}">-- wybierz --</option>
+                <option th:each="c : ${classes}"
+                        th:value="${c.id}"
+                        th:text="${c.title + ' | ' + c.startTime + ' - ' + c.endTime + ' | limit: ' + c.maxParticipants}">
+                </option>
+            </select>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a class="btn btn-secondary" th:href="@{/reservations/mine}" th:text="#{form.cancel}">Anuluj</a>
+            <button class="btn btn-primary" type="submit" th:text="#{reservations.form.submit}">Rezerwuj</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

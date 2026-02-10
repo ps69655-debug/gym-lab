@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>403 - Brak dostępu</title>
+    <style>
+        body { font-family: Arial; margin: 50px; }
+        .error { color: red; font-size: 48px; text-align: center; }
+        .message { background: #fee; padding: 20px; border: 1px solid red; margin: 20px 0; }
+        table { margin: 20px 0; }
+        a { color: blue; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div class="error">🚫 403</div>
+
+<div class="message">
+    <h1>Brak dostępu</h1>
+    <p>Nie masz uprawnień do tej strony.</p>
+</div>
+
+<p><a th:href="@{/GymPass}">← Powrót do listy karnetów</a></p>
+
+</body>
+</html>

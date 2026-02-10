@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+        <html xmlns:th="http://www.thymeleaf.org" lang="pl">
+        <head>
+        <meta charset="UTF-8">
+        <title>Użytkownicy - Gym System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{fragments/header :: header}"></div>
+
+<div class="container mt-4">
+    <h2>Użytkownicy</h2>
+
+    <div class="alert alert-success" th:if="${param.success}">
+        Zapisano zmianę roli.
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Email</th>
+            <th>Imię i nazwisko</th>
+            <th>Aktywny</th>
+            <th>Rola</th>
+            <th>Akcja</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.id}">1</td>
+            <td th:text="${u.email}">mail</td>
+            <td th:text="${u.fullName}">name</td>
+            <td>
+                <span class="badge bg-success" th:if="${u.enabled}">TAK</span>
+                <span class="badge bg-secondary" th:if="${!u.enabled}">NIE</span>
+            </td>
+
+            <td>
+                <form th:action="@{'/admin/users/' + ${u.id} + '/role'}" method="post" class="d-flex gap-2">
+                    <select class="form-select form-select-sm" name="role">
+                        <option th:each="r : ${roles}"
+                                th:value="${r}"
+                                th:selected="${r == u.role}"
+                                th:text="${r}">
+                        </option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" type="submit">Zapisz</button>
+                </form>
+            </td>
+
+            <td><span class="text-muted">—</span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html></title>
+</head>
+<body>
+
+</body>
+</html>
